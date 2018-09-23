@@ -4,9 +4,9 @@ const User = require("../../user/user.js")
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
 
-router.get('/', (req, res) => {
+router.post('/', (req, res) => {
     User.findOne({
-        name: req.query.name
+        name: req.body.name
     }, function(err, user) {
 
 
@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
         } else if (user) {
 
 
-            if (!bcrypt.compareSync(req.query.password, user.password)) {
+            if (!bcrypt.compareSync(req.body.password, user.password)) {
                 res.json({ success: false, message: 'Authentication failed. Wrong password.' });
             } else {
 
