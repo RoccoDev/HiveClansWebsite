@@ -18,7 +18,7 @@ app.use('/api', require('./routes/api/index.js'))
 app.use('/user', require('./routes/user/index.js'))
 app.use('/clan', require('./routes/clans/index.js'))
 
-app.listen(process.env.OPENSHIFT_NODEJS_PORT, () => {
+app.listen(8080, () => {
     console.log("Server started.")
 })
 
