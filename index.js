@@ -18,8 +18,8 @@ app.use('/api', require('./routes/api/index.js'))
 app.use('/user', require('./routes/user/index.js'))
 app.use('/clan', require('./routes/clans/index.js'))
 
-app.listen(443, () => {
-    console.log("Server started on port 443.")
+app.listen(process.env.OPENSHIFT_NODEJS_PORT, () => {
+    console.log("Server started.")
 })
 
 mongoose.connect(config.database)
