@@ -1,0 +1,30 @@
+{
+  "name": "hiveclanswebsite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoccoDev/HiveClansWebsite.git"
+  },
+  "keywords": [
+    "hive"
+  ],
+  "author": "RoccoDev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RoccoDev/HiveClansWebsite/issues"
+  },
+  "homepage": "https://github.com/RoccoDev/HiveClansWebsite#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.17",
+    "morgan": "^1.9.1"
+  }
+}
