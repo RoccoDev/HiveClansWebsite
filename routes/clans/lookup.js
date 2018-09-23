@@ -7,6 +7,10 @@ const Clan = require("../../clan/clan.js")
 router.use('/:id', (req, res, next) => {
 
     Clan.find({_id: req.params.id}, function(err, clans) {
+        if(err) {
+            res.sendStatus(404)
+            return;
+        }
         req["clan"] = clans[0]
         next()
     });
