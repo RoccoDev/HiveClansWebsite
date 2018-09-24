@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const User = require("../../../user/user.js")
 
 
 router.use(require('../../user/middleware.js'))
@@ -55,6 +55,36 @@ router.post('/removeMember', (req, res) => {
         if(err) throw err
         res.json({success: true})
     })
+
+})
+
+
+router.post('/addMemberNoId', (req, res) => {
+    var clan = req.clan
+    var user = req.user
+    if(clan.owner.id !== user._id) {
+        res.sendStatus(403)
+        return;
+    }
+
+    User.find({name: req.body.name}, function(err, users) {
+        var id = -1;
+        var name = req.body.name;
+        if(!err && users.length != 0) {
+            id = users[0]._id;
+        }
+        clan.members.push({
+            id: id,
+            name: name,
+            role: req.body.role
+        })
+
+        clan.save((err) => {
+            if(err) throw err
+            res.json({success: true})
+        })
+    })
+
 
 })
 
