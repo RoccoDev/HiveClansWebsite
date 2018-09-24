@@ -11,14 +11,24 @@ router.use('/:id', (req, res, next) => {
             res.sendStatus(404)
             return;
         }
-        req["clan"] = clans[0]
+        var clan = clans[0].toObject()
+        const jwt = require("jsonwebtoken")
+        var token = req.headers['x-access-token'];
+        if (token) {
+            var decoded = jwt.verify(token, process.env.SECRET)
+
+            if(clan.owner.id === decoded.user._id.toString()) {
+                clan.currentUserIsOwner = true
+            }
+        }
+
+        req["clan"] = clan
         next()
     });
 
 })
 
 router.get('/:id', (req, res) => {
-
         res.json(req.clan)
 })
 router.use('/:id/edit', require('./edit/members.js'))
