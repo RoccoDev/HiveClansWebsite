@@ -10,6 +10,7 @@ router.post('/', (req, res) => {
         name: req.body.name,
         description: req.body.description,
         gamemode: req.body.gamemode,
+        addedAt: new Date().getTime(),
         owner: {
             id: req.user._id,
             name: req.user.name

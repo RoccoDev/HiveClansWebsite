@@ -9,6 +9,7 @@ module.exports = mongoose.model('Clan', new schema({
         id: String,
         name: String
     },
+    addedAt: Number,
     members: [
         {
             id: String,
