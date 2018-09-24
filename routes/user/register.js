@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 
 router.post('/', (req, res) => {
 
-    User.find({name: req.body.name}, function(err, users) {
+    User.find({name: {"$regex": "^" + req.body.name, "$options": "i"}}, function(err, users) {
         if(!err && users.length != 0) {
             res.status(409).json({success: false})
             return;
