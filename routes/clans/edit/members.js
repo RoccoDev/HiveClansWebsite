@@ -89,5 +89,45 @@ router.post('/addMemberNoId', (req, res) => {
 })
 
 
+router.post('/addMembersSerialize', (req, res) => {
+    var clan = req.clan
+    var user = req.user
+    if (clan.owner.id !== user._id) {
+        res.sendStatus(403)
+        return;
+    }
+    res.sendStatus(200)
+    const qs = require('qs')
+    var rawbody = ''
+    var body = req.body
+    for (var i in body) {
+        console.log(i)
+        rawbody += (i + '=' + body[i] + '&')
+    }
+    const parsed = qs.parse(rawbody)
+    const arr = parsed.adding;
+    for (var i in arr) {
+        var obj = arr[i];
+        User.find({name: {"$regex": "^" + obj.name, "$options": "i"}}, function(err, users) {
+                var id = -1;
+                var name = obj.name;
+                if (!err && users.length != 0) {
+                    id = users[0]._id;
+                }
+                clan.members.push({
+                    id: id,
+                    name: name,
+                    role: obj.role
+                })
+                clan.save((err) => {
+                    if (err) throw err;
+                })
+
+        })
+    }
+})
+
+
+
 
 module.exports = router
