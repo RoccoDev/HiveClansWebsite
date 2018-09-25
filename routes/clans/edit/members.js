@@ -101,30 +101,40 @@ router.post('/addMembersSerialize', (req, res) => {
     var rawbody = ''
     var body = req.body
     for (var i in body) {
-        console.log(i)
+
         rawbody += (i + '=' + body[i] + '&')
     }
     const parsed = qs.parse(rawbody)
     const arr = parsed.adding;
-    for (var i in arr) {
-        var obj = arr[i];
-        User.find({name: {"$regex": "^" + obj.name, "$options": "i"}}, function(err, users) {
-                var id = -1;
-                var name = obj.name;
-                if (!err && users.length != 0) {
-                    id = users[0]._id;
-                }
-                clan.members.push({
-                    id: id,
-                    name: name,
-                    role: obj.role
-                })
-                clan.save((err) => {
-                    if (err) throw err;
-                })
 
-        })
+    var promises = []
+
+    for (var j in arr) {
+        if (!arr.hasOwnProperty(j)) continue;
+        var obj = arr[j];
+        promises.push(User.findOne({name: {"$regex": "^" + obj.name, "$options": "i"}}).exec())
     }
+
+    Promise.all(promises).then(data => {
+        for(var k in data) {
+            if (!data.hasOwnProperty(k)) continue;
+            var objk = data[k]
+            var objOriginal = arr[k]
+            var id = -1
+            if(objk != null) {
+                id = objk._id
+            }
+            clan.members.push({
+                id: id,
+                name: objOriginal.name,
+                role: objOriginal.role
+            })
+        }
+        clan.save(err => {
+            if(err) return
+        })
+    })
+
 })
 
 
