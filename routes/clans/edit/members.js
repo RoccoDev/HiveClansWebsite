@@ -100,10 +100,12 @@ router.post('/addMembersSerialize', (req, res) => {
     const qs = require('qs')
     var rawbody = ''
     var body = req.body
+    console.log("Body: " + body)
     for (var i in body) {
 
         rawbody += (i + '=' + body[i] + '&')
     }
+    console.log("Raw: " + rawbody)
     const parsed = qs.parse(rawbody)
     const arr = parsed.adding;
 
