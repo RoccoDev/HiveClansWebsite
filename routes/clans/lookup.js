@@ -17,7 +17,7 @@ router.use('/:id', (req, res, next) => {
         if (token) {
             var decoded = jwt.verify(token, process.env.SECRET)
             if(clan.owner.id === decoded.user._id) {
-                clan["currentUserIsOwner"] = true
+                req.currentUserIsOwner = true
             }
         }
 
@@ -28,7 +28,11 @@ router.use('/:id', (req, res, next) => {
 })
 
 router.get('/:id', (req, res) => {
-    res.json(req.clan)
+    var clan = req.clan
+    if(req.currentUserIsOwner) {
+        clan.currentUserIsOwner = true
+    }
+    res.json(clan)
 })
 router.use('/:id/edit', require('./edit/members.js'))
 router.use('/:id/edit/general', require('./edit/text.js'))
