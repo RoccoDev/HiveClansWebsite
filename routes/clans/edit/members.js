@@ -7,18 +7,6 @@ const Gen = require("../../../snowflake.js")
 
 router.use(require('../../user/middleware.js'))
 
-Array.prototype.removeIf = function(callback) {
-    var i = 0;
-    while (i < this.length) {
-        if (callback(this[i], i)) {
-            this.splice(i, 1);
-        }
-        else {
-            ++i;
-        }
-    }
-};
-
 
 router.post('/addMember', (req, res) => {
     var clan = req.clan
@@ -27,11 +15,11 @@ router.post('/addMember', (req, res) => {
         res.sendStatus(403)
         return;
     }
-    clan.members.push({
+    clan.members[req.body.id] = {
         id: req.body.id,
         name: req.body.name,
         role: req.body.role
-    })
+    }
 
         Clan.save(clan)
         res.json({success: true})
@@ -48,9 +36,7 @@ router.post('/removeMember', (req, res) => {
     }
 
 
-    clan.members.removeIf((item) => {
-        return item.id === req.body.id
-    })
+    delete clan.members[req.body.id]
 
     Clan.save(clan)
     res.json({success: true})
@@ -72,11 +58,11 @@ router.post('/addMemberNoId', (req, res) => {
         if(!err && users.length != 0) {
             id = users[0]._id;
         }
-        clan.members.push({
+        clan.members[id] = {
             id: id,
             name: name,
             role: req.body.role
-        })
+        }
 
         Clan.save(clan)
         res.json({success: true})
@@ -102,12 +88,10 @@ router.post('/addMembersSerialize', (req, res) => {
         if (!arr.hasOwnProperty(j)) continue;
         var obj = arr[j];
         var promise = User.get_promise({key: "nameLower", value: obj.name.toLowerCase()})
-        console.log(promise)
         promises.push(promise)
     }
 
     Promise.all(promises).then(data => {
-        console.log(data)
         for(var k in data) {
             if (!data.hasOwnProperty(k)) continue;
             var objk = data[k]
@@ -116,11 +100,11 @@ router.post('/addMembersSerialize', (req, res) => {
             if(objk != null) {
                 id = objk._id
             }
-            clan.members.push({
+            clan.members[id] = {
                 id: id,
                 name: objOriginal.name,
                 role: objOriginal.role
-            })
+            }
         }
         Clan.save(clan)
 

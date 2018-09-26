@@ -7,7 +7,7 @@ const Gen = require('../../snowflake.js')
 router.post('/', (req, res) => {
 
     User.find({key: "nameLower", value: req.body.name.toLowerCase()}, function(json) {
-        console.log(json)
+
         if(json != null) {
             res.status(409).json({success: false})
             return;
