@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../../../user/user.js")
+const Clan = require("../../../clan/clan.js")
+const Gen = require("../../../snowflake.js")
 
 
 router.use(require('../../user/middleware.js'))
@@ -31,10 +33,9 @@ router.post('/addMember', (req, res) => {
         role: req.body.role
     })
 
-    clan.save((err) => {
-        if(err) throw err
+        Clan.save(clan)
         res.json({success: true})
-    })
+
 
 })
 
@@ -48,13 +49,11 @@ router.post('/removeMember', (req, res) => {
 
 
     clan.members.removeIf((item) => {
-        return item._id === req.body.id
+        return item.id === req.body.id
     })
 
-    clan.save((err) => {
-        if(err) throw err
-        res.json({success: true})
-    })
+    Clan.save(clan)
+    res.json({success: true})
 
 })
 
@@ -68,7 +67,7 @@ router.post('/addMemberNoId', (req, res) => {
     }
 
     User.find({name: req.body.name}, function(err, users) {
-        var id = -1;
+        var id = Gen.gen();
         var name = req.body.name;
         if(!err && users.length != 0) {
             id = users[0]._id;
@@ -79,10 +78,8 @@ router.post('/addMemberNoId', (req, res) => {
             role: req.body.role
         })
 
-        clan.save((err) => {
-            if(err) throw err
-            res.json({success: true})
-        })
+        Clan.save(clan)
+        res.json({success: true})
     })
 
 
@@ -104,15 +101,18 @@ router.post('/addMembersSerialize', (req, res) => {
     for (var j in arr) {
         if (!arr.hasOwnProperty(j)) continue;
         var obj = arr[j];
-        promises.push(User.findOne({name: {"$regex": "^" + obj.name, "$options": "i"}}).exec())
+        var promise = User.get_promise({key: "nameLower", value: obj.name.toLowerCase()})
+        console.log(promise)
+        promises.push(promise)
     }
 
     Promise.all(promises).then(data => {
+        console.log(data)
         for(var k in data) {
             if (!data.hasOwnProperty(k)) continue;
             var objk = data[k]
             var objOriginal = arr[k]
-            var id = -1
+            var id = Gen.gen()
             if(objk != null) {
                 id = objk._id
             }
@@ -122,9 +122,8 @@ router.post('/addMembersSerialize', (req, res) => {
                 role: objOriginal.role
             })
         }
-        clan.save(err => {
-            if(err) return
-        })
+        Clan.save(clan)
+
     })
 
 })

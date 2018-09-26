@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const Clan = require('../../../clan/clan.js')
 
 
 router.use(require('../../user/middleware.js'))
@@ -23,11 +23,8 @@ router.post('/', (req, res) => {
         clan.gamemode = req.body.gamemode
     }
 
-    clan.save((err) => {
-        if(err) throw err
-        res.json({success: true})
-    })
-
+    Clan.save(clan)
+    res.json({success: true})
 })
 
 module.exports = router

@@ -6,12 +6,12 @@ const Clan = require("../../clan/clan.js")
 
 router.use('/:id', (req, res, next) => {
 
-    Clan.find({_id: req.params.id}, function(err, clans) {
-        if(err) {
+    Clan.get(req.params.id, function(clan) {
+        if(clan == null) {
             res.sendStatus(404)
             return;
         }
-        var clan = clans[0]
+
         const jwt = require("jsonwebtoken")
         var token = req.headers['x-access-token'];
         if (token) {
@@ -29,11 +29,7 @@ router.use('/:id', (req, res, next) => {
 })
 
 router.get('/:id', (req, res) => {
-    var clan = req.clan.toObject()
-    if(req.currentUserIsOwner) {
-        clan.currentUserIsOwner = true
-    }
-    res.json(clan)
+    res.json(req.clan)
 })
 router.use('/:id/edit', require('./edit/members.js'))
 router.use('/:id/edit/general', require('./edit/text.js'))

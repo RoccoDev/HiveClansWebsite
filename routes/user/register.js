@@ -2,24 +2,26 @@ const express = require('express');
 const router = express.Router();
 const User = require("../../user/user.js")
 const bcrypt = require('bcrypt');
+const Gen = require('../../snowflake.js')
 
 router.post('/', (req, res) => {
 
-    User.find({name: {"$regex": "^" + req.body.name, "$options": "i"}}, function(err, users) {
-        if(!err && users.length != 0) {
+    User.find({key: "nameLower", value: req.body.name.toLowerCase()}, function(json) {
+        console.log(json)
+        if(json != null) {
             res.status(409).json({success: false})
             return;
         }
-        var user = new User({
-            name: req.body.name,
-            password: bcrypt.hashSync(req.body.password, 10)
-        })
 
-        user.save((err) => {
-            if(err) throw err
-            console.log("User saved")
-            res.json({success: true})
-        })
+        var user = {
+            _id: Gen.gen(),
+            name: req.body.name,
+            nameLower: req.body.name.toLowerCase(),
+            password: bcrypt.hashSync(req.body.password, 10)
+        }
+
+        User.save(user)
+        res.json({success: true})
     })
 
 

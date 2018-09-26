@@ -8,12 +8,12 @@ const Clan = require("../../clan/clan.js")
 router.get('/', (req, res) => {
     var query = req.query
     var name = query.name
-    Clan.find({name: {"$regex": name, "$options": "i"}}, function(err, clans) {
-        if(err) {
+    Clan.findStarts({key: "nameLower", value: name.toLowerCase()}, function(clans) {
+        if(clans == null) {
             res.json([])
             return;
         }
-        res.status(200).json(clans)
+        res.status(200).json(Object.values(clans))
     })
 
 })

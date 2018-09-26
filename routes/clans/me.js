@@ -7,12 +7,12 @@ const Clan = require("../../clan/clan.js")
 router.use(require("../user/middleware.js"))
 router.get('/', (req, res) => {
 
-    Clan.find({$or: [{'owner.id': req.user._id.toString()}, {'members': {"$elemMatch": {'id': req.user._id.toString()}}}]}, function(err, clans) {
-        if(err) {
+    Clan.findForUser(req.user._id, function(clans) {
+        if(clans == null) {
             res.sendStatus(404)
             return;
         }
-        res.status(200).json(clans)
+        res.status(200).json(Object.values(clans))
     });
 
 })

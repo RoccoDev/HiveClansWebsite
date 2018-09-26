@@ -5,12 +5,14 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
 
 router.post('/', (req, res) => {
-    User.findOne({
-        name: req.body.name
-    }, function(err, user) {
+    User.find({
+        key: "nameLower",
+        value: req.body.name.toLowerCase()
+    }, function(users) {
+        var user = users[Object.keys(users)[0]];
 
 
-        if (err) throw err;
+
 
         if (!user) {
             res.json({ success: false, message: 'Authentication failed. User not found.' });

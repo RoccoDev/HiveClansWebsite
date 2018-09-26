@@ -4,8 +4,8 @@ const Clan = require("../../clan/clan.js")
 
 
 router.get('/', (req, res) => {
-    Clan.find({}, function(err, users) {
-        res.json(users);
+    Clan.list(function(clans) {
+        res.json(Object.values(clans));
     });
 })
 
