@@ -52,10 +52,10 @@ router.post('/addMemberNoId', (req, res) => {
         return;
     }
 
-    User.find({name: req.body.name}, function(err, users) {
+    User.find({key: "nameLower", value: req.body.name.toLowerCase()}, function(users) {
         var id = Gen.gen();
         var name = req.body.name;
-        if(!err && users.length != 0) {
+        if(users != null) {
             id = users[0]._id;
         }
         clan.members[id] = {
@@ -92,9 +92,10 @@ router.post('/addMembersSerialize', (req, res) => {
     }
 
     Promise.all(promises).then(data => {
+
         for(var k in data) {
             if (!data.hasOwnProperty(k)) continue;
-            var objk = data[k]
+            var objk = data[k].val()
             var objOriginal = arr[k]
             var id = Gen.gen()
             if(objk != null) {
