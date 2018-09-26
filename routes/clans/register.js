@@ -9,7 +9,7 @@ router.use(require('../user/middleware.js'))
 router.post('/', (req, res) => {
 
     var members = {}
-    members[req.user._id] = {id: req.user._id, name: req.user.name, role: "Owner"}
+    members[req.user._id] = {id: req.user._id, name: req.user.name, role: "Owner", ignore: true}
     var clan = {
         _id: Gen.gen(),
         name: req.body.name,

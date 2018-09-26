@@ -16,9 +16,8 @@ router.use('/:id', (req, res, next) => {
         var token = req.headers['x-access-token'];
         if (token) {
             var decoded = jwt.verify(token, process.env.SECRET)
-
-            if(clan.owner.id === decoded.user._id.toString()) {
-                req.currentUserIsOwner = true
+            if(clan.owner.id === decoded.user._id) {
+                clan["currentUserIsOwner"] = true
             }
         }
 
