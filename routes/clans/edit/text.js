@@ -22,6 +22,12 @@ router.post('/', (req, res) => {
     if(req.body.gamemode) {
         clan.gamemode = req.body.gamemode
     }
+    if(req.body.applicationUrl) {
+        clan.applicationUrl = req.body.applicationUrl
+    }
+    if(req.body.forumUrl) {
+        clan.forumUrl = req.body.forumUrl
+    }
 
     Clan.save(clan)
     res.json({success: true})

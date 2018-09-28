@@ -15,10 +15,12 @@ router.use('/:id', (req, res, next) => {
         const jwt = require("jsonwebtoken")
         var token = req.headers['x-access-token'];
         if (token) {
-            var decoded = jwt.verify(token, process.env.SECRET)
-            if(clan.owner.id === decoded.user._id) {
-                req.currentUserIsOwner = true
-            }
+            try {
+                var decoded = jwt.verify(token, process.env.SECRET)
+                if (clan.owner.id === decoded.user._id) {
+                    req.currentUserIsOwner = true
+                }
+            } catch(err) {}
         }
 
         req["clan"] = clan
