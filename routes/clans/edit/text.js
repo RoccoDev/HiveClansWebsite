@@ -5,6 +5,17 @@ const Clan = require('../../../clan/clan.js')
 
 router.use(require('../../user/middleware.js'))
 
+function escapeHtml(text) {
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
 router.post('/', (req, res) => {
     console.log(req.body)
     var clan = req.clan
@@ -14,20 +25,20 @@ router.post('/', (req, res) => {
         return;
     }
     if(req.body.description) {
-        clan.description = req.body.description
+        clan.description = escapeHtml(req.body.description)
     }
     if(req.body.name) {
-        clan.name = req.body.name
+        clan.name = escapeHtml(req.body.name)
     }
     if(req.body.gamemode) {
-        clan.gamemode = req.body.gamemode
+        clan.gamemode = escapeHtml(req.body.gamemode)
     }
     if(req.body.applicationUrl) {
         if(req.body.applicationUrl === "null") {
             delete clan.applicationUrl
         }
         else {
-            clan.applicationUrl = req.body.applicationUrl
+            clan.applicationUrl = escapeHtml(req.body.applicationUrl)
         }
     }
     if(req.body.forumUrl) {
@@ -36,7 +47,7 @@ router.post('/', (req, res) => {
             delete clan.forumUrl
         }
         if(req.body.forumUrl.startsWith("https://forum.hivemc.com/") || req.body.forumUrl.startsWith("http://forum.hivemc.com/")) {
-            clan.forumUrl = req.body.forumUrl
+            clan.forumUrl = escapeHtml(req.body.forumUrl)
         }
     }
 
