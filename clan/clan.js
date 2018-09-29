@@ -21,6 +21,14 @@ function list(callback) {
     db.ref('clans').once("value", (snapshot) => callback(snapshot.val()))
 }
 
+function remove(clan) {
+    db.ref('clans/' + clan).remove()
+}
+
+function removeMember(clan, member) {
+    db.ref('clans/' + clan + '/members/' + member).remove()
+}
+
 function findStarts(obj, callback) {
     var key = obj.key
     var value = obj.value
@@ -34,4 +42,4 @@ function findForUser(id, callback) {
     db.ref('clans').orderByChild('members/' + id + '/id').equalTo(id).once("value", (snapshot) => callback(snapshot.val()))
 }
 
-module.exports = {save, find, get, list, findStarts, findForUser}
+module.exports = {save, find, get, list, findStarts, findForUser, remove, removeMember}

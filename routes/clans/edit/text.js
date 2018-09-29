@@ -33,4 +33,15 @@ router.post('/', (req, res) => {
     res.json({success: true})
 })
 
+router.post('/delete', (req, res) => {
+    var clan = req.clan
+    var user = req.user
+    if(clan.owner.id !== user._id) {
+        res.sendStatus(403)
+        return;
+    }
+    Clan.remove(clan._id)
+    res.json({success: true})
+})
+
 module.exports = router

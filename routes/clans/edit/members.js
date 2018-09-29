@@ -37,8 +37,7 @@ router.post('/removeMember', (req, res) => {
 
 
     delete clan.members[req.body.id]
-
-    Clan.save(clan)
+    Clan.removeMember(clan._id, req.body.id)
     res.json({success: true})
 
 })
