@@ -5,8 +5,8 @@ const Clan = require('../../../clan/clan.js')
 
 router.use(require('../../user/middleware.js'))
 
-
 router.post('/', (req, res) => {
+    console.log(req.body)
     var clan = req.clan
     var user = req.user
     if(clan.owner.id !== user._id) {
@@ -23,13 +23,16 @@ router.post('/', (req, res) => {
         clan.gamemode = req.body.gamemode
     }
     if(req.body.applicationUrl) {
-        if(req.body.applicationUrl.isEmpty()) {
+        if(req.body.applicationUrl === "null") {
             delete clan.applicationUrl
         }
-        clan.applicationUrl = req.body.applicationUrl
+        else {
+            clan.applicationUrl = req.body.applicationUrl
+        }
     }
     if(req.body.forumUrl) {
-        if(req.body.forumUrl.isEmpty()) {
+
+        if(req.body.forumUrl === "null") {
             delete clan.forumUrl
         }
         if(req.body.forumUrl.startsWith("https://forum.hivemc.com/") || req.body.forumUrl.startsWith("http://forum.hivemc.com/")) {
