@@ -8,7 +8,7 @@ var mongoose    = require('mongoose');
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({type: "*/*"}));
 
 app.get('/', (req, res) => {
     res.status(200).send("Hi")
