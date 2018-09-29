@@ -9,9 +9,10 @@ router.use(require('../user/middleware.js'))
 router.post('/', (req, res) => {
 
     var members = {}
+    var id = Gen.gen()
     members[req.user._id] = {id: req.user._id, name: req.user.name, role: "Owner", ignore: true}
     var clan = {
-        _id: Gen.gen(),
+        _id: id,
         name: req.body.name,
         nameLower: req.body.name.toLowerCase(),
         description: req.body.description,
@@ -25,7 +26,7 @@ router.post('/', (req, res) => {
     }
 
     Clan.save(clan)
-    res.json({success: true})
+    res.json({success: true, id: id})
 })
 
 
