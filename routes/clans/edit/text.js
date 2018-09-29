@@ -23,10 +23,18 @@ router.post('/', (req, res) => {
         clan.gamemode = req.body.gamemode
     }
     if(req.body.applicationUrl) {
+        if(req.body.applicationUrl.isEmpty()) {
+            delete clan.applicationUrl
+        }
         clan.applicationUrl = req.body.applicationUrl
     }
     if(req.body.forumUrl) {
-        clan.forumUrl = req.body.forumUrl
+        if(req.body.forumUrl.isEmpty()) {
+            delete clan.forumUrl
+        }
+        if(req.body.forumUrl.startsWith("https://forum.hivemc.com/") || req.body.forumUrl.startsWith("http://forum.hivemc.com/")) {
+            clan.forumUrl = req.body.forumUrl
+        }
     }
 
     Clan.save(clan)
