@@ -14,6 +14,9 @@
   "keywords": [
     "hive"
   ],
+  "engines": {
+    "node": "7"
+  },
   "author": "RoccoDev",
   "license": "MIT",
   "bugs": {
@@ -25,11 +28,15 @@
     "async": "^2.6.1",
     "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
+    "busboy": "^0.2.14",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "firebase-admin": "^6.0.0",
+    "firebase-functions": "^2.0.5",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.17",
     "morgan": "^1.9.1",
+    "multer": "^1.4.0",
     "qs": "^6.5.2",
     "shortid": "^2.2.13"
   }

@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../../user/user.js")
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
+const functions = require('firebase-functions');
 
 router.post('/', (req, res) => {
     User.find({
@@ -30,7 +31,7 @@ router.post('/', (req, res) => {
                         name: user.name
                     }
                 };
-                var token = jwt.sign(payload, process.env.SECRET, {
+                var token = jwt.sign(payload, functions.config().someservice.secret, {
                     expiresIn: '24h'
                 });
 

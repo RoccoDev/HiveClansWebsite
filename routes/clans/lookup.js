@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Clan = require("../../clan/clan.js")
+const functions = require('firebase-functions');
 
 
 
@@ -16,7 +17,7 @@ router.use('/:id', (req, res, next) => {
         var token = req.headers['x-access-token'];
         if (token) {
             try {
-                var decoded = jwt.verify(token, process.env.SECRET)
+                var decoded = jwt.verify(token, functions.config().someservice.secret)
                 if (clan.owner.id === decoded.user._id) {
                     req.currentUserIsOwner = true
                 }
@@ -38,6 +39,7 @@ router.get('/:id', (req, res) => {
 })
 router.use('/:id/edit', require('./edit/members.js'))
 router.use('/:id/edit/general', require('./edit/text.js'))
+router.use('/:id/edit/image', require('./edit/image.js'))
 
 
 

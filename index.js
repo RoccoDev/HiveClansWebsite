@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
+const functions = require('firebase-functions');
+var cors = require('cors')
 
-const config = require('./db.js');
 var bodyParser  = require('body-parser');
 
-var mongoose    = require('mongoose');
 
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({type: "*/*"}));
 
@@ -22,3 +23,4 @@ app.listen(process.env.PORT || 8080, () => {
     console.log("Server started.")
 })
 
+exports.api = functions.https.onRequest(app);

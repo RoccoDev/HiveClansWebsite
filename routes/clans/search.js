@@ -13,7 +13,9 @@ router.get('/', (req, res) => {
             res.json([])
             return;
         }
-        res.status(200).json(Object.values(clans))
+        res.status(200).json(Object.keys(clans).map(function(key) {
+            return clans[key];
+        }))
     })
 
 })

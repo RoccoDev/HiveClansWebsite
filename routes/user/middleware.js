@@ -1,11 +1,12 @@
 const jwt = require("jsonwebtoken")
+const functions = require('firebase-functions');
 
 module.exports = function(req, res, next) {
     var token = req.query.token || req.headers['x-access-token'];
     if (token) {
 
         // verifies secret and checks exp
-        jwt.verify(token, process.env.SECRET, function (err, decoded) {
+        jwt.verify(token, functions.config().someservice.secret, function (err, decoded) {
 
             if (err) {
                 return res.json({success: false, message: 'Failed to authenticate token.'});

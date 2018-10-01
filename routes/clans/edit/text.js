@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Clan = require('../../../clan/clan.js')
+const stg = require('../../../storagemgr.js')
 
 
 router.use(require('../../user/middleware.js'))
@@ -17,7 +18,6 @@ function escapeHtml(text) {
     return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 router.post('/', (req, res) => {
-    console.log(req.body)
     var clan = req.clan
     var user = req.user
     if(clan.owner.id !== user._id) {
@@ -32,6 +32,9 @@ router.post('/', (req, res) => {
     }
     if(req.body.gamemode) {
         clan.gamemode = escapeHtml(req.body.gamemode)
+    }
+    if(req.body.color) {
+        clan.color = escapeHtml(req.body.color)
     }
     if(req.body.applicationUrl) {
         if(req.body.applicationUrl === "null") {
@@ -62,6 +65,7 @@ router.post('/delete', (req, res) => {
         res.sendStatus(403)
         return;
     }
+    stg.bucket().deleteFiles({prefix: 'clan/' + clan._id})
     Clan.remove(clan._id)
     res.json({success: true})
 })
